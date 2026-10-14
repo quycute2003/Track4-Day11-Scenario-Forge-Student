@@ -1,0 +1,9 @@
+{
+  "mssv": "2A202602745",
+  "todo_tests": 31,
+  "parity_tests": 10,
+  "quick": false,
+  "hazard_feasible": true,
+  "viewer_runs": 17,
+  "notes": "Test counts from completed pytest invocations. Evidence provenance and hazard schema/physics verified before packaging."
+}

@@ -30,7 +30,21 @@ def min_ttc(R: core.Rollout, cap: float = 10.0) -> np.ndarray:
     Shapes: R.F is (K, NF, N, 7) with x, z, hx, hz, v, a, d; core.IX["ego"] is the ego's actor index.
     Vectorise over frames (a Python loop over 481 frames x K scenarios is too slow for Part C).
     """
-    raise NotImplementedError("TODO 1: min_ttc")
+    leader = R.EGO[..., 3].astype(int)
+    idx = np.maximum(leader, 0)
+    follow = R.F[:, :, core.IX["ego"]]
+    lead = np.take_along_axis(R.F, idx[..., None, None], axis=2)[:, :, 0]
+    lon = ((lead[..., :2] - follow[..., :2]) * follow[..., 2:4]).sum(-1)
+    actors = R.actors or core.ACTORS
+    half = np.array([0.3 if a.kind == "ped" else a.dims[0] / 2 for a in actors])
+    gap = np.maximum(lon - HALF_EGO - half[idx], 0)
+    dv = follow[..., 4] - lead[..., 4]
+    ttc = np.where((leader >= 0) & (dv > 0.1), gap / np.maximum(dv, 1e-6), np.inf)
+    result = np.minimum(cap, ttc.min(axis=1))
+    for k in range(R.K):
+        if ego_events(R, k):
+            result[k] = 0
+    return result
 
 
 def contact_type(R: core.Rollout, k: int, event: dict) -> str:
@@ -39,13 +53,27 @@ def contact_type(R: core.Rollout, k: int, event: dict) -> str:
     Put the other actor in the ego's frame: lon = r . h, lat = -r_x h_z + r_z h_x with h = (hx, hz) of the ego.
     'front' if lon > 2.3 and |lat| < 1.6; 'rear' if lon < -2.3 and |lat| < 1.6; otherwise 'side'.
     """
-    raise NotImplementedError("TODO 2: contact_type")
+    other = event["b"] if event["a"] == "ego" else event["a"]
+    ego = R.F[k, event["f"], core.IX["ego"]]
+    actor = R.F[k, event["f"], R.ids.index(other)]
+    dx, dz = actor[:2] - ego[:2]
+    lon = dx * ego[2] + dz * ego[3]
+    lat = -dx * ego[3] + dz * ego[2]
+    if abs(lat) < 1.6:
+        if lon > HALF_EGO:
+            return "front"
+        if lon < -HALF_EGO:
+            return "rear"
+    return "side"
 
 
 def progress_metrics(R: core.Rollout) -> tuple[np.ndarray, np.ndarray]:
     """TODO 9. Two (K,) arrays: the distance the ego covers in the 24 s (sum of frame-to-frame steps, metres),
     and the number of frames where the ego brakes harder than 3 m/s^2 (acceleration column < -3)."""
-    raise NotImplementedError("TODO 9: progress_metrics")
+    ego = R.F[:, :, core.IX["ego"]]
+    distance = np.linalg.norm(np.diff(ego[..., :2], axis=1), axis=-1).sum(axis=1)
+    harsh = (ego[..., 5] < -3).sum(axis=1)
+    return distance, harsh
 
 
 # ---------------------------------------------------------------- given helpers

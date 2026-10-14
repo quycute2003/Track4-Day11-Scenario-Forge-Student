@@ -1,0 +1,42 @@
+{
+  "params": {
+    "cutT0": 10.144594016693624,
+    "cutDur": 5.169434539591448,
+    "cutV": 15.023094620049514,
+    "cutDs": 6.4889451023686675,
+    "pedT0": 6.8482295452906214,
+    "pedV": 1.450220526598995,
+    "busGo": 21.508041341024175,
+    "tgT": 1.4586374876833463,
+    "cutGap": 8.06536728508773,
+    "pedGap": 5.9330860789297235,
+    "mu": 0.8,
+    "pedLook": 1,
+    "cutBrake": 3.3658101823153395,
+    "civil": true
+  },
+  "baseline_events": [],
+  "T2_events": [
+    {
+      "t": 13.1,
+      "f": 262,
+      "a": "ego",
+      "b": "C2",
+      "kind": "contact",
+      "x": 93.50869750976562,
+      "z": 2.458369493484497,
+      "fake": false
+    }
+  ],
+  "baseline_merge_time": 17.7,
+  "T2_merge_time": 10.600000000000001,
+  "baseline_ego_x_at_T2_contact": 95.4535903930664,
+  "T2_ego_x_at_contact": 91.2118911743164,
+  "source": "Additional diagnostic replay of a feasible scenario drawn from the bus_bypass TRAIN proposal with the original TRAIN RNG seed; not a new rate estimate or selection dataset.",
+  "policies": {
+    "baseline": {},
+    "candidate": {
+      "T": 2.0
+    }
+  }
+}

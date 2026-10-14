@@ -1,0 +1,55 @@
+{
+  "format": "avsim-studio/1",
+  "params": {
+    "cutT0": 6.5,
+    "cutDur": 2.4,
+    "cutV": 15,
+    "pedT0": 11,
+    "pedV": 1.45,
+    "busGo": 17,
+    "cutDs": -4,
+    "tgT": 0.9,
+    "mu": 0.8,
+    "cutGap": 12,
+    "cutBrake": 0,
+    "pedGap": 4.5,
+    "pedLook": 1,
+    "civil": true
+  },
+  "policy": {},
+  "hazards": [
+    {
+      "x": 40,
+      "lane": "E2",
+      "d": 0.6,
+      "v": 4,
+      "swerve": 3.6,
+      "swDur": 2.5,
+      "t0": 0,
+      "trig": 10,
+      "type": "bike"
+    }
+  ],
+  "ego": "planner",
+  "world": "scene",
+  "space": {
+    "h0_x": [
+      35,
+      45
+    ],
+    "h0_trig": [
+      5,
+      15
+    ],
+    "h0_swerve": [
+      3.2,
+      3.79
+    ],
+    "h0_swDur": [
+      2.5,
+      2.8
+    ]
+  },
+  "exposure": null,
+  "why": "Thử nghiệm có điều kiện trên cảnh dựng ở chương 10, không phải tần suất ngoài đời. exposure chưa xác định: chưa có nguồn hoặc số lượt ego gặp đúng tình huống xe đạp lạng vào làn trên tổng số chuyến; không dùng số lần chủ động thêm hazard vào mô phỏng thay thế exposure. space là lân cận hình học của cảnh: vị trí khởi đầu 40±5 m, kích hoạt khi ego cách 10±5 m; độ lạng 3.2–3.79 m để từ tim làn E2+0.6 m tiến tới mép làn ego (z=2.06–2.65 m), thời gian 2.5–2.8 s. Gia tốc ngang cực đại pi²*3.79/(2*2.5²)=2.99246 m/s², dưới giới hạn 3 của studio.hazard_ok. Đây là miền stress test thiết kế từ bản đồ và mô hình cosine avsim/core.py, studio.py; không tuyên bố đây là phân phối đo từ xe đạp thực. BSafe-360 (https://pmc.ncbi.nlm.nih.gov/articles/PMC10385114/) minh họa thu thập và nhận diện hành vi lạng bằng dữ liệu cảm biến, không cung cấp exposure dùng trực tiếp cho cảnh này. Nghiên cứu Dozza và Werneke 2014 (https://doi.org/10.1016/j.trf.2014.04.001) liên hệ mặt đường bảo trì kém với sự kiện nguy hiểm của xe đạp; không dùng tỷ lệ sự kiện nguy hiểm chung thay cho tần suất lạng vào làn ego. Để suy ra tần suất mỗi chuyến cần video và số chuyến quan sát trên tuyến mục tiêu."
+}
